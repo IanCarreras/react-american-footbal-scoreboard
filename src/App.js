@@ -8,6 +8,7 @@ function App() {
   const [homeScore, setHomeScore] = useState(0)
   const [awayScore, setAwayScore] = useState(0)
   const [time, setTime] = useState('15:00')
+  const [quarter, setQuarter] = useState(1)
 
   const handleChange = (team, score) => {
     if(team === 'home') return setHomeScore(homeScore+score)
@@ -16,12 +17,19 @@ function App() {
 
   const startGame = () => {
     let currentTime = 1500
+    let newQuarter = 1
     let timer = setInterval(() => {
       currentTime--
       let newTime = currentTime.toString().slice(0,2) + ':' + currentTime.toString().slice(2,4)
       setTime(newTime)
-      console.log('counting : ', currentTime)
-      if(currentTime === 0) {
+      console.log(newQuarter)
+      if(currentTime === 1495) {
+        newQuarter++
+        setQuarter(newQuarter)
+        currentTime = 1500
+        setTime(newTime)
+      }
+      if(newQuarter === 4 && currentTime === 1495) {
         clearInterval(timer)
       }
     }, 1000)
@@ -44,7 +52,7 @@ function App() {
             <div className="away__score">{awayScore}</div>
           </div>
         </div>
-        <BottomRow />
+        <BottomRow quarter={quarter}/>
       </section>
       <section className="buttons">
         <button onClick={() => startGame()}>Start Game</button>
